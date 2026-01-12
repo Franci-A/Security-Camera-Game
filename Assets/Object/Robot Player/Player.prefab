@@ -233,6 +233,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteract
   playerForward: {fileID: 5513752359730407496}
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &8787050316159956893
 GameObject:
   m_ObjectHideFlags: 0

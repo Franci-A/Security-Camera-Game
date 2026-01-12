@@ -1,4 +1,5 @@
 using DG.Tweening;
+using HelperScripts.EventSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +13,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float maxAngleRight = 20f;
     [SerializeField] private float maxZoomIn = -10f;
     [SerializeField] private float maxZoomOut = 10f;
+
+    [SerializeField] private EventObjectScriptable onValidateCommandeEvent;
 
     private void Start()
     {
@@ -32,67 +35,95 @@ public class CameraController : MonoBehaviour
 
         string[] inputs = value.Split(' ');
 
+        Command command = null;
+
         if (inputs[0].CompareTo("rotate") == 0)
         {
-            if (inputs.Length < 2)
+            if (inputs.Length != 2)
                 return;
             if (inputs[1].CompareTo("left") == 0)
             {
                 //rotate to max left angle
-                RotateCameraMax(true);
+                command = RotateCameraMax(true);
             }
             else if (inputs[1].CompareTo("right") == 0)
             {
                 //rotate to max right angle
-                RotateCameraMax(false);
+                command = RotateCameraMax(false);
             }
             else if (float.TryParse(inputs[1], out float angle))
             {
-                RotateCameraAngle(angle);
+                command = RotateCameraAngle(angle);
+            }
+            else
+            {
+                command = new Command(value, false, "Unknown command");
             }
         }
         else if (inputs[0].CompareTo("zoom") == 0)
         {
-            if(inputs.Length < 2)
+            if (inputs.Length != 2)
                 return;
-            if(inputs[1].CompareTo("in") == 0)
+            if (inputs[1].CompareTo("in") == 0)
+            {
                 ZoomCamera(-5f);
-            else if(inputs[1].CompareTo("out") == 0)
+                command = new Command(value, true, "Zooming in");
+            }
+            else if (inputs[1].CompareTo("out") == 0)
+            {
                 ZoomCamera(5f);
+                command = new Command(value, true, "Zooming out");
+            }
+            else
+            {
+                command = new Command(value, false, "Unknown command");
+            }
         }
-    }
+        else
+        {
+            command = new Command(value, false, "Unknown command");
+        }
 
+            onValidateCommandeEvent.Call(command); 
+        }
 
-    private void RotateCameraAngle(float angle)
+    private Command RotateCameraAngle(float angle)
     {
-        if (angle == 0) return;
+        if (angle == 0) return null;
 
-        if(DOTween.IsTweening(pivotPoint))
+        if (DOTween.IsTweening(pivotPoint))
             DOTween.Kill(pivotPoint);
 
         Vector3 targetAngle = pivotPoint.eulerAngles + new Vector3(0, angle,0);
         targetAngle.y = Mathf.Clamp(targetAngle.y, maxAngleLeft, maxAngleRight);
         pivotPoint.DORotate(targetAngle , angle / moveSpeed);
+
+        return new Command("rotate " + angle, true, "Rotating " + angle +" degres");
     }
 
-    private void RotateCameraMax(bool isLeft)
+    private Command RotateCameraMax(bool isLeft)
     {
         if (DOTween.IsTweening(pivotPoint))
             DOTween.Kill(pivotPoint);
         float duration = 1;
         Vector3 targetAngle;
+
+        string commandName = isLeft ? "rotate left" : "rotate right";
+        string commandResponse = isLeft ? "Rotating to max left angle" : "Rotating to max right angle";
+
         if (isLeft) {
 
             duration = (pivotPoint.eulerAngles.y - maxAngleLeft)/moveSpeed;
             targetAngle = new Vector3(0, maxAngleLeft);
         }
         else {
-            duration = (pivotPoint.eulerAngles.y - maxAngleRight) /moveSpeed;
+            duration = (pivotPoint.eulerAngles.y + maxAngleRight) /moveSpeed;
             targetAngle = new Vector3(0, maxAngleRight);
         }
 
         pivotPoint.DORotate(targetAngle, duration).SetEase(Ease.Linear);
-    
+        return new Command(commandName, true, commandResponse);
+
     }
 
     private void ZoomCamera(float distance)

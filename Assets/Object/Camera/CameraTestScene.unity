@@ -464,8 +464,9 @@ MonoBehaviour:
   controlPanelInput: {fileID: 1692029253}
   pivotPoint: {fileID: 1345119340}
   moveSpeed: 5
-  maxAngleLeft: -40
-  maxAngleRight: 40
+  zoomAmount: 10
+  maxAngleLeft: -46.6
+  maxAngleRight: 43.8
   maxZoomIn: -10
   maxZoomOut: 10
   onValidateCommandeEvent: {fileID: 11400000, guid: bf6702f8aa908b944b1d69df6d1b34db, type: 2}

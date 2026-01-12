@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private TMP_InputField controlPanelInput;
     [SerializeField] private Transform pivotPoint;
     [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float zoomAmount = 10;
     [SerializeField] private float maxAngleLeft = -20f;
     [SerializeField] private float maxAngleRight = 20f;
     [SerializeField] private float maxZoomIn = -10f;
@@ -66,12 +67,12 @@ public class CameraController : MonoBehaviour
                 return;
             if (inputs[1].CompareTo("in") == 0)
             {
-                ZoomCamera(-5f);
+                ZoomCamera(-zoomAmount);
                 command = new Command(value, true, "Zooming in");
             }
             else if (inputs[1].CompareTo("out") == 0)
             {
-                ZoomCamera(5f);
+                ZoomCamera(zoomAmount);
                 command = new Command(value, true, "Zooming out");
             }
             else
@@ -84,8 +85,8 @@ public class CameraController : MonoBehaviour
             command = new Command(value, false, "Unknown command");
         }
 
-            onValidateCommandeEvent.Call(command); 
-        }
+        onValidateCommandeEvent.Call(command);
+    }
 
     private Command RotateCameraAngle(float angle)
     {
@@ -94,11 +95,11 @@ public class CameraController : MonoBehaviour
         if (DOTween.IsTweening(pivotPoint))
             DOTween.Kill(pivotPoint);
 
-        Vector3 targetAngle = pivotPoint.eulerAngles + new Vector3(0, angle,0);
+        Vector3 targetAngle = pivotPoint.eulerAngles + new Vector3(0, angle, 0);
         targetAngle.y = Mathf.Clamp(targetAngle.y, maxAngleLeft, maxAngleRight);
-        pivotPoint.DORotate(targetAngle , angle / moveSpeed);
+        pivotPoint.DORotate(targetAngle, angle / moveSpeed);
 
-        return new Command("rotate " + angle, true, "Rotating " + angle +" degres");
+        return new Command("rotate " + angle, true, "Rotating " + angle + " degres");
     }
 
     private Command RotateCameraMax(bool isLeft)
@@ -111,13 +112,15 @@ public class CameraController : MonoBehaviour
         string commandName = isLeft ? "rotate left" : "rotate right";
         string commandResponse = isLeft ? "Rotating to max left angle" : "Rotating to max right angle";
 
-        if (isLeft) {
+        if (isLeft)
+        {
 
-            duration = (pivotPoint.eulerAngles.y - maxAngleLeft)/moveSpeed;
+            duration = (pivotPoint.eulerAngles.y - maxAngleLeft) / moveSpeed;
             targetAngle = new Vector3(0, maxAngleLeft);
         }
-        else {
-            duration = (pivotPoint.eulerAngles.y + maxAngleRight) /moveSpeed;
+        else
+        {
+            duration = (pivotPoint.eulerAngles.y + maxAngleRight) / moveSpeed;
             targetAngle = new Vector3(0, maxAngleRight);
         }
 
@@ -128,14 +131,32 @@ public class CameraController : MonoBehaviour
 
     private void ZoomCamera(float distance)
     {
-        if(Camera.main.fieldOfView + distance > maxZoomOut)
-            Camera.main.fieldOfView = maxZoomOut;
+        if (Camera.main.fieldOfView + distance > maxZoomOut)
+            DOTween.To(() => Camera.main.fieldOfView, x => Camera.main.fieldOfView = x, Camera.main.fieldOfView + maxZoomOut, Mathf.Abs(maxZoomOut) / moveSpeed).SetEase(Ease.Linear);
 
-        if(Camera.main.fieldOfView + distance < maxZoomIn)
-            Camera.main.fieldOfView = maxZoomIn;
+
+        if (Camera.main.fieldOfView + distance < maxZoomIn)
+            DOTween.To(() => Camera.main.fieldOfView, x => Camera.main.fieldOfView = x, Camera.main.fieldOfView + maxZoomIn, Mathf.Abs(maxZoomIn) / moveSpeed).SetEase(Ease.Linear);
+
 
         else
-            Camera.main.fieldOfView += distance;
+            DOTween.To(() => Camera.main.fieldOfView, x => Camera.main.fieldOfView = x, Camera.main.fieldOfView + distance, Mathf.Abs(distance) / moveSpeed).SetEase(Ease.Linear);
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward);
+        Gizmos.color = Color.red;
+        Vector3 vec = transform.forward;
+        vec = UnityEngine.Quaternion.Euler(0, maxAngleLeft, 0) * vec;
+        Gizmos.DrawRay(new Ray(transform.position, vec));
+        
+        Gizmos.color = Color.darkOliveGreen;
+        vec = transform.forward;
+        vec = UnityEngine.Quaternion.Euler(0, maxAngleRight, 0) * vec;
+        Gizmos.DrawRay(new Ray(transform.position, vec));
+    }
 }
+
+

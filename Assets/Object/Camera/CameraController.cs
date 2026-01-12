@@ -1,16 +1,110 @@
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private TMP_InputField controlPanelInput;
+    [SerializeField] private Transform pivotPoint;
+    [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float maxAngleLeft = -20f;
+    [SerializeField] private float maxAngleRight = 20f;
+    [SerializeField] private float maxZoomIn = -10f;
+    [SerializeField] private float maxZoomOut = 10f;
+
+    private void Start()
     {
-        
+        maxZoomOut += Camera.main.fieldOfView;
+        maxZoomIn += Camera.main.fieldOfView;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnValidateCommande(InputAction.CallbackContext context)
     {
-        
+        if (!context.performed)
+            return;
+
+        if (controlPanelInput.text.Length == 0)
+            return;
+
+        string value = controlPanelInput.text.ToLower().Trim();
+        controlPanelInput.text = "";
+
+        string[] inputs = value.Split(' ');
+
+        if (inputs[0].CompareTo("rotate") == 0)
+        {
+            if (inputs.Length < 2)
+                return;
+            if (inputs[1].CompareTo("left") == 0)
+            {
+                //rotate to max left angle
+                RotateCameraMax(true);
+            }
+            else if (inputs[1].CompareTo("right") == 0)
+            {
+                //rotate to max right angle
+                RotateCameraMax(false);
+            }
+            else if (float.TryParse(inputs[1], out float angle))
+            {
+                RotateCameraAngle(angle);
+            }
+        }
+        else if (inputs[0].CompareTo("zoom") == 0)
+        {
+            if(inputs.Length < 2)
+                return;
+            if(inputs[1].CompareTo("in") == 0)
+                ZoomCamera(-5f);
+            else if(inputs[1].CompareTo("out") == 0)
+                ZoomCamera(5f);
+        }
     }
+
+
+    private void RotateCameraAngle(float angle)
+    {
+        if (angle == 0) return;
+
+        if(DOTween.IsTweening(pivotPoint))
+            DOTween.Kill(pivotPoint);
+
+        Vector3 targetAngle = pivotPoint.eulerAngles + new Vector3(0, angle,0);
+        targetAngle.y = Mathf.Clamp(targetAngle.y, maxAngleLeft, maxAngleRight);
+        pivotPoint.DORotate(targetAngle , angle / moveSpeed);
+    }
+
+    private void RotateCameraMax(bool isLeft)
+    {
+        if (DOTween.IsTweening(pivotPoint))
+            DOTween.Kill(pivotPoint);
+        float duration = 1;
+        Vector3 targetAngle;
+        if (isLeft) {
+
+            duration = (pivotPoint.eulerAngles.y - maxAngleLeft)/moveSpeed;
+            targetAngle = new Vector3(0, maxAngleLeft);
+        }
+        else {
+            duration = (pivotPoint.eulerAngles.y - maxAngleRight) /moveSpeed;
+            targetAngle = new Vector3(0, maxAngleRight);
+        }
+
+        pivotPoint.DORotate(targetAngle, duration).SetEase(Ease.Linear);
+    
+    }
+
+    private void ZoomCamera(float distance)
+    {
+        if(Camera.main.fieldOfView + distance > maxZoomOut)
+            Camera.main.fieldOfView = maxZoomOut;
+
+        if(Camera.main.fieldOfView + distance < maxZoomIn)
+            Camera.main.fieldOfView = maxZoomIn;
+
+        else
+            Camera.main.fieldOfView += distance;
+    }
+
 }

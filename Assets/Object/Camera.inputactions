@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "Camera",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "e531705f-4539-48f5-a60e-0b4c5285fc18",
+            "actions": [
+                {
+                    "name": "Validate",
+                    "type": "Button",
+                    "id": "8ca0ca90-a1a1-4225-8af3-fba5c4441dc8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d459f9e7-e702-4260-9b78-be2c0fcc9d25",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Validate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

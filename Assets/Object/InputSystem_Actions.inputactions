@@ -991,34 +991,6 @@
                     "isPartOfComposite": false
                 }
             ]
-        },
-        {
-            "name": "Camera",
-            "id": "57ea8501-ef86-4082-bf98-727463cdcc22",
-            "actions": [
-                {
-                    "name": "Validate Input",
-                    "type": "Button",
-                    "id": "ba3e2b67-2042-451b-893f-b78138412ffa",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "9c0ad9f3-497d-4054-83b9-d180639a9cf8",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Validate Input",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
         }
     ],
     "controlSchemes": [

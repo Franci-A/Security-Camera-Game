@@ -6,10 +6,12 @@ public class PlayerMovement : MonoBehaviour
     CharacterController characterController;
     [SerializeField] private float speed = 5f;
     private Vector3 direction;
-    private Vector3 inputValue;
+
     [Range(0,1)]
     [SerializeField] private float controllzeDeadzone = 0.15f;
     private Transform cameraTransform;
+
+    [SerializeField] private Transform visual;
 
     private void Start()
     {
@@ -22,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
         Vector2 value = input.Get<Vector2>();
         if(value.magnitude < controllzeDeadzone)
             value = Vector2.zero;
-        inputValue = new Vector3(value.x, 0, value.y);
 
         Vector3 camFoward = cameraTransform.forward;
         Vector3 camRight = cameraTransform.right;
@@ -33,7 +34,9 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forwardRelative = value.y * camFoward.normalized;
         Vector3 rightRelative = value.x * camRight.normalized;
 
-        direction = (forwardRelative + rightRelative).normalized;
+        direction = (forwardRelative + rightRelative);
+        if (value.magnitude > controllzeDeadzone)
+            visual.forward = direction;
     }
 
     private void FixedUpdate()

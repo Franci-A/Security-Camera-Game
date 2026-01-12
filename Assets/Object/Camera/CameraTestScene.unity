@@ -206,10 +206,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1682109595138897218, guid: a493fc0b092499145b3bc3866c33a58e, type: 3}
-      propertyPath: controllzeDeadzone
-      value: 0.188
-      objectReference: {fileID: 0}
     - target: {fileID: 2495385189467307580, guid: a493fc0b092499145b3bc3866c33a58e, type: 3}
       propertyPath: m_Name
       value: Player

@@ -1,98 +1,32 @@
 using DG.Tweening;
-using HelperScripts.EventSystem;
-using NUnit;
-using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField controlPanelInput;
+    private CinemachineCamera cineCamera;
     [SerializeField] private Transform pivotPoint;
+    [Header("Camera Movement Settings")]
     [SerializeField] private float moveSpeed = 5;
-    [SerializeField] private float zoomSpeed = 4;
-    [SerializeField] private float zoomAmount = 10;
     [SerializeField] private float maxAngleLeft = -20f;
     [SerializeField] private float maxAngleRight = 20f;
+    [Header("Camera Zoom Settings")]
+    [SerializeField] private float zoomSpeed = 4;
+    [SerializeField] private float zoomAmount = 10;
     [SerializeField] private float maxZoomIn = -10f;
     [SerializeField] private float maxZoomOut = 10f;
 
-    [SerializeField] private EventObjectScriptable onValidateCommandeEvent;
 
     private void Start()
     {
+        cineCamera = GetComponent<CinemachineCamera>();
         maxZoomOut += Camera.main.fieldOfView;
         maxZoomIn += Camera.main.fieldOfView;
     }
 
-    public void OnValidateCommande(InputAction.CallbackContext context)
+    public void RotateCameraAngle(float angle)
     {
-        if (!context.performed)
-            return;
-
-        if (controlPanelInput.text.Length == 0)
-            return;
-
-        string value = controlPanelInput.text.ToLower().Trim();
-        controlPanelInput.text = "";
-
-        string[] inputs = value.Split(' ');
-
-        Command command = null;
-
-        if (inputs[0].CompareTo("rotate") == 0)
-        {
-            if (inputs.Length != 2)
-                return;
-            if (inputs[1].CompareTo("left") == 0)
-            {
-                //rotate to max left angle
-                command = RotateCameraMax(true);
-            }
-            else if (inputs[1].CompareTo("right") == 0)
-            {
-                //rotate to max right angle
-                command = RotateCameraMax(false);
-            }
-            else if (float.TryParse(inputs[1], out float angle))
-            {
-                command = RotateCameraAngle(angle);
-            }
-            else
-            {
-                command = new Command(value, false, "Unknown command");
-            }
-        }
-        else if (inputs[0].CompareTo("zoom") == 0)
-        {
-            if (inputs.Length != 2)
-                return;
-            if (inputs[1].CompareTo("in") == 0)
-            {
-                ZoomCamera(-zoomAmount);
-                command = new Command(value, true, "Zooming in");
-            }
-            else if (inputs[1].CompareTo("out") == 0)
-            {
-                ZoomCamera(zoomAmount);
-                command = new Command(value, true, "Zooming out");
-            }
-            else
-            {
-                command = new Command(value, false, "Unknown command");
-            }
-        }
-        else
-        {
-            command = new Command(value, false, "Unknown command");
-        }
-
-        onValidateCommandeEvent.Call(command);
-    }
-
-    private Command RotateCameraAngle(float angle)
-    {
-        if (angle == 0) return null;
+        if (angle == 0) return;
 
         if (DOTween.IsTweening(pivotPoint))
             DOTween.Kill(pivotPoint);
@@ -102,18 +36,14 @@ public class CameraController : MonoBehaviour
         float duration = (pivotPoint.rotation.y * Mathf.Rad2Deg - targetAngle) /moveSpeed;
         pivotPoint.DORotate(new Vector3(0, targetAngle,0), duration);
 
-        return new Command("rotate " + angle, true, "Rotating " + angle + " degres");
     }
 
-    private Command RotateCameraMax(bool isLeft)
+    public void RotateCameraMax(bool isLeft)
     {
         if (DOTween.IsTweening(pivotPoint))
             DOTween.Kill(pivotPoint);
         float duration = 1;
         Vector3 targetAngle;
-
-        string commandName = isLeft ? "rotate left" : "rotate right";
-        string commandResponse = isLeft ? "Rotating to max left angle" : "Rotating to max right angle";
 
         Debug.Log((pivotPoint.rotation.y * Mathf.Rad2Deg) + "  -  total : " + (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft));
         if (isLeft)
@@ -128,22 +58,21 @@ public class CameraController : MonoBehaviour
         }
 
         pivotPoint.DORotate(targetAngle, duration).SetEase(Ease.Linear);
-        return new Command(commandName, true, commandResponse);
 
     }
 
-    private void ZoomCamera(float distance)
+    public void ZoomCamera()
     {
         if (DOTween.IsTweening(Camera.main))
             DOTween.Kill(Camera.main);
 
-        float endValue = Camera.main.fieldOfView + distance;
-        if (Camera.main.fieldOfView + distance > maxZoomOut)
+        float endValue = cineCamera.Lens.FieldOfView + zoomAmount;
+        if (cineCamera.Lens.FieldOfView + zoomAmount > maxZoomOut)
             endValue = maxZoomOut;
-        if (Camera.main.fieldOfView + distance < maxZoomIn)
+        if (cineCamera.Lens.FieldOfView + zoomAmount < maxZoomIn)
             endValue = maxZoomIn;            
             
-        DOTween.To(() => Camera.main.fieldOfView, x => Camera.main.fieldOfView = x, endValue, Mathf.Abs(Camera.main.fieldOfView - endValue) / zoomSpeed).SetEase(Ease.Linear);
+        DOTween.To(() => cineCamera.Lens.FieldOfView, x => cineCamera.Lens.FieldOfView = x, endValue, Mathf.Abs(cineCamera.Lens.FieldOfView - endValue) / zoomSpeed).SetEase(Ease.Linear);
     }
 
     private void OnDrawGizmosSelected()

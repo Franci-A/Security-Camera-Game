@@ -2,8 +2,6 @@ using HelperScripts.EventSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
-using static UnityEngine.Rendering.DebugUI;
 
 public class ConsolePlayerManager : MonoBehaviour
 {
@@ -13,7 +11,7 @@ public class ConsolePlayerManager : MonoBehaviour
 
     void Start()
     {
-        
+        controlPanelInput.ActivateInputField();
     }
 
     public void OnValidateCommande(InputAction.CallbackContext context)
@@ -41,6 +39,8 @@ public class ConsolePlayerManager : MonoBehaviour
         }
 
         onValidateCommandeEvent.Call(command);
+        controlPanelInput.ActivateInputField();
+
     }
 
     private Command Rotate(string value, string[] inputs)

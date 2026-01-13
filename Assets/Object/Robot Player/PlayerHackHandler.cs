@@ -23,10 +23,11 @@ public class PlayerHackHandler : MonoBehaviour
 
     private void StartHack(object obj)
     {
+
         currentCameraHacked = obj as CameraHackHandler;
         currentCodeIndex = 0;
 
-        hackPopupInstance = Instantiate<HackPopupHandler>(hackPopupPrefab);
+        hackPopupInstance = Instantiate<HackPopupHandler>(hackPopupPrefab, transform.position + Vector3.up *1.5f, Camera.main.transform.rotation);
         sequence = CreateHackSequence(4);
         hackPopupInstance.InitPopup(sequence);
     }

@@ -13,9 +13,6 @@ public class ConsoleManager : MonoBehaviour
     private void Awake()
     {
         commandLines = new List<string>();
-    }
-    private void Start()
-    {
         onValidateEvent.AddListener(AddCommandLine);
     }
 

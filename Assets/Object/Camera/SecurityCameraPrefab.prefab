@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df36fb689ee6182479ea9cebe4f570fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraHackHandler
+  startCamera: 0
   isHacked: 0
   cameraHackStartEvent: {fileID: 11400000, guid: 69478fce9d116ea459f8e3de53691fdd, type: 2}
   cameraHackEndEvent: {fileID: 11400000, guid: 26d0277cd09977a4ca20712c4995015c, type: 2}
@@ -202,6 +203,7 @@ GameObject:
   - component: {fileID: 5831277431257045012}
   - component: {fileID: 7451921167593391672}
   - component: {fileID: 6781254961004772378}
+  - component: {fileID: 7656906550153184095}
   m_Layer: 6
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -288,3 +290,17 @@ MonoBehaviour:
   zoomAmount: 10
   maxZoomIn: -10
   maxZoomOut: 10
+--- !u!114 &7656906550153184095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5017251485489447871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87c319e29aaf9b419d0a3507d5712a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SecurityCamerahandler
+  cameraHackHandler: {fileID: 871845061102106562}
+  cameraController: {fileID: 6781254961004772378}

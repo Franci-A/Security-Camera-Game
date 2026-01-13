@@ -10,7 +10,7 @@ public class CameraHackHandler : MonoBehaviour, IInteractable
 
     public string GetCode => code;
 
-    private void Start()
+    private void Awake()
     {
         code = Random.Range(1000, 9999).ToString();
     }

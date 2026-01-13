@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotPlayerManager
   cameraHackStartEvent: {fileID: 11400000, guid: 69478fce9d116ea459f8e3de53691fdd, type: 2}
-  cameraHackEndEvent: {fileID: 11400000, guid: 69478fce9d116ea459f8e3de53691fdd, type: 2}
+  cameraHackEndEvent: {fileID: 11400000, guid: 26d0277cd09977a4ca20712c4995015c, type: 2}
 --- !u!65 &7392470541551334049
 BoxCollider:
   m_ObjectHideFlags: 0

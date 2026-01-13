@@ -50,7 +50,7 @@ public class ConsolePlayerManager : MonoBehaviour
 
         if (inputs[1].CompareTo("left") == 0)
         {
-            if (inputs.Length == 3 && float.TryParse(inputs[1], out float angle) && angle > 0)
+            if (inputs.Length == 3 && float.TryParse(inputs[2], out float angle) && angle > 0)
             {
                 activeCameraController.RotateCameraAngle(-angle);
                 return new Command(value, true, "Rotation " + angle + "° left");
@@ -65,9 +65,9 @@ public class ConsolePlayerManager : MonoBehaviour
         }
         else if (inputs[1].CompareTo("right") == 0)
         {
-            if (inputs.Length == 3 && float.TryParse(inputs[1], out float angle) && angle > 0)
+            if (inputs.Length == 3 && float.TryParse(inputs[2], out float angle) && angle > 0)
             {
-                activeCameraController.RotateCameraAngle(-angle);
+                activeCameraController.RotateCameraAngle(angle);
                 return new Command(value, true, "Rotation " + angle + "° right");
             }
             else if (inputs.Length == 2)

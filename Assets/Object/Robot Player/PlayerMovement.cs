@@ -13,17 +13,23 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Transform visual;
 
+    private bool isActive = true;
+    public bool IsActive { get => isActive; set => isActive = value; }
+
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         cameraTransform = Camera.main.transform;
     }
 
-    public void OnMove(InputValue input)
+    public void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 value = input.Get<Vector2>();
+        Vector2 value = context.ReadValue<Vector2>();
         if(value.magnitude < controllzeDeadzone)
             value = Vector2.zero;
+
+        if (!isActive)
+            return;
 
         Vector3 camFoward = cameraTransform.forward;
         Vector3 camRight = cameraTransform.right;
@@ -41,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isActive)
+            return;
         characterController.Move(direction * speed * Time.deltaTime);
     }
 }

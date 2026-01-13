@@ -46,7 +46,7 @@ public class CameraController : MonoBehaviour
         float duration = 1;
         Vector3 targetAngle;
 
-        Debug.Log((pivotPoint.rotation.y * Mathf.Rad2Deg) + "  -  total : " + (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft));
+        //Debug.Log((pivotPoint.rotation.y * Mathf.Rad2Deg) + "  -  total : " + (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft));
         if (isLeft)
         {
             duration = (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft) / moveSpeed;

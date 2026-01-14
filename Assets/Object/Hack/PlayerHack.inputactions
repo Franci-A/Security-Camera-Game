@@ -29,6 +29,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "End",
+            "id": "9400df71-dc36-4396-895a-5aab7995a8ce",
+            "actions": [
+                {
+                    "name": "New action1",
+                    "type": "Button",
+                    "id": "2128b47b-dc40-4f0a-8d83-3e9558b0b307",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f526ac3d-c47c-475a-96a7-05d2bce71894",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

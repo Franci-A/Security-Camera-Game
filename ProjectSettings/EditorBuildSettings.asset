@@ -9,20 +9,23 @@ EditorBuildSettings:
     path: Assets/Object/Menus/MainMenu.unity
     guid: 1172d9d9aa66eb84f82ffd4a0cccfe68
   - enabled: 1
-    path: Assets/Level/Lvl 1.unity
+    path: Assets/Object/Level/Lvl 1.unity
     guid: 6aa212edc043dc04e97a5aa19b445ed9
   - enabled: 1
-    path: Assets/Level/Lvl 2.unity
+    path: Assets/Object/Level/Lvl 2.unity
     guid: c412547f00879a24daabf91a1055820c
   - enabled: 1
-    path: Assets/Level/Lvl 3.unity
+    path: Assets/Object/Level/Lvl 3.unity
     guid: 1d690daf0fe097847948515ec35724d5
   - enabled: 1
-    path: Assets/Level/Lvl 4.unity
+    path: Assets/Object/Level/Lvl 4.unity
     guid: 779b2ddd208eed44db99e66c8a919433
   - enabled: 1
-    path: Assets/Level/Lvl 5.unity
+    path: Assets/Object/Level/Lvl 5.unity
     guid: 4965455267625d34f914b746db7555c4
+  - enabled: 1
+    path: Assets/Object/Level/LevelFlow/EndLevel.unity
+    guid: a566a37ec5b26a44bbf42c1915159b47
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

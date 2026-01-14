@@ -1909,6 +1909,10 @@ PrefabInstance:
       propertyPath: maxAngleRight
       value: 85.9
       objectReference: {fileID: 0}
+    - target: {fileID: 7656906550153184095, guid: 5a2cccdeb86d65d4bbecc66b7401be09, type: 3}
+      propertyPath: startCamera
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8296713078589300081, guid: 5a2cccdeb86d65d4bbecc66b7401be09, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.18

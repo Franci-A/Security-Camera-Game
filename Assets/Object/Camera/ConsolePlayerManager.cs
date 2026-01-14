@@ -46,6 +46,9 @@ public class ConsolePlayerManager : MonoBehaviour
         }else if (inputs[0].CompareTo("camera") == 0) 
         {
             command = Camera(value, inputs);
+        }else if (value.CompareTo("main menu") == 0 || value.CompareTo("menu")== 0) 
+        {
+            command = Menu(value, inputs);
         }
 
             onValidateCommandeEvent.Call(command);
@@ -127,5 +130,11 @@ public class ConsolePlayerManager : MonoBehaviour
 
         }else 
             return new Command(value, false, "Camera not found");
+    }
+
+    private Command Menu(string value, string[] inputs)
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        return new Command(value, true, "Loading Main Menu...");
     }
 }

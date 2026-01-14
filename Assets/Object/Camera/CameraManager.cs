@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
         playerManager = GetComponent<ConsolePlayerManager>();
         //get all cameras
         allCameras = FindObjectsByType<SecurityCameraHandler>(FindObjectsSortMode.None);
+        bool hasStartCamera = false;
         for (int i = 0; i < allCameras.Length; i++)
         {
             if (allCameras[i].startCamera)
@@ -24,11 +25,20 @@ public class CameraManager : MonoBehaviour
                 activeCamera.SetActiveCamera();
                 playerManager.SetActiveCameraController(activeCamera.cameraController);
                 onValidateCommandeEvent.Call(new Command("camera " + activeCamera.cameraHackHandler.GetCode, true, "Starting camera " + activeCamera.cameraHackHandler.GetCode));
+                hasStartCamera = true;
             }
             else
             {
                 allCameras[i].DeactivateCamera();
             }
+        }
+
+        if (!hasStartCamera)
+        {
+                       activeCamera = allCameras[0];
+            activeCamera.SetActiveCamera();
+            playerManager.SetActiveCameraController(activeCamera.cameraController);
+            onValidateCommandeEvent.Call(new Command("camera " + activeCamera.cameraHackHandler.GetCode, true, "Starting camera " + activeCamera.cameraHackHandler.GetCode));
         }
     }
 

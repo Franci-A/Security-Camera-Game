@@ -2,18 +2,23 @@ using HelperScripts.EventSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
-using static UnityEngine.Rendering.DebugUI;
 
 public class ConsolePlayerManager : MonoBehaviour
 {
     [SerializeField] private TMP_InputField controlPanelInput;
-    [SerializeField] private CameraController activeCameraController;
+    private CameraController activeCameraController;
     [SerializeField] private EventObjectScriptable onValidateCommandeEvent;
+    private CameraManager cameraManager;
 
     void Start()
     {
-        
+        controlPanelInput.ActivateInputField();
+        cameraManager = GetComponent<CameraManager>();
+    }
+
+    public void SetActiveCameraController(CameraController cameraController)
+    {
+        activeCameraController = cameraController;
     }
 
     public void OnValidateCommande(InputAction.CallbackContext context)
@@ -38,9 +43,14 @@ public class ConsolePlayerManager : MonoBehaviour
         else if (inputs[0].CompareTo("zoom") == 0)
         {
             command = Zoom(value, inputs);
+        }else if (inputs[0].CompareTo("camera") == 0) 
+        {
+            command = Camera(value, inputs);
         }
 
-        onValidateCommandeEvent.Call(command);
+            onValidateCommandeEvent.Call(command);
+        controlPanelInput.ActivateInputField();
+
     }
 
     private Command Rotate(string value, string[] inputs)
@@ -50,7 +60,7 @@ public class ConsolePlayerManager : MonoBehaviour
 
         if (inputs[1].CompareTo("left") == 0)
         {
-            if (inputs.Length == 3 && float.TryParse(inputs[1], out float angle) && angle > 0)
+            if (inputs.Length == 3 && float.TryParse(inputs[2], out float angle) && angle > 0)
             {
                 activeCameraController.RotateCameraAngle(-angle);
                 return new Command(value, true, "Rotation " + angle + "° left");
@@ -65,9 +75,9 @@ public class ConsolePlayerManager : MonoBehaviour
         }
         else if (inputs[1].CompareTo("right") == 0)
         {
-            if (inputs.Length == 3 && float.TryParse(inputs[1], out float angle) && angle > 0)
+            if (inputs.Length == 3 && float.TryParse(inputs[2], out float angle) && angle > 0)
             {
-                activeCameraController.RotateCameraAngle(-angle);
+                activeCameraController.RotateCameraAngle(angle);
                 return new Command(value, true, "Rotation " + angle + "° right");
             }
             else if (inputs.Length == 2)
@@ -103,5 +113,19 @@ public class ConsolePlayerManager : MonoBehaviour
         {
             return new Command(value, false, "Invalid zooming");
         }
+    }
+
+    private Command Camera(string value, string[] inputs)
+    {
+        if (inputs.Length != 2)
+            return new Command(value, false, "Invalid camera command");
+        //switch camera
+
+        if (cameraManager.OnSwitchCamera(inputs[1]))
+        {
+            return new Command(value, true, "Switching to camera " + inputs[1]);
+
+        }else 
+            return new Command(value, false, "Camera not found");
     }
 }

@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "PlayerHack",
+    "maps": [
+        {
+            "name": "Hack Actions",
+            "id": "3dacab1e-a6b4-442b-9dea-f59264d6cd67",
+            "actions": [
+                {
+                    "name": "Code",
+                    "type": "Value",
+                    "id": "4e0773d6-b285-44f0-8b19-1c4e08916b9f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "adfea77a-ca28-49ec-aa7b-0137b52c2f31",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Code",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

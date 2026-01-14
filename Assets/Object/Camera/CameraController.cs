@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class CameraController : MonoBehaviour
 
         float targetAngle = (pivotPoint.rotation.y * Mathf.Rad2Deg) + angle;
         targetAngle = Mathf.Clamp(targetAngle, maxAngleLeft, maxAngleRight);
-        float duration = (pivotPoint.rotation.y * Mathf.Rad2Deg - targetAngle) /moveSpeed;
+        float duration = MathF.Abs(pivotPoint.rotation.y * Mathf.Rad2Deg - targetAngle) /moveSpeed;
         pivotPoint.DORotate(new Vector3(0, targetAngle,0), duration);
 
     }
@@ -45,7 +46,7 @@ public class CameraController : MonoBehaviour
         float duration = 1;
         Vector3 targetAngle;
 
-        Debug.Log((pivotPoint.rotation.y * Mathf.Rad2Deg) + "  -  total : " + (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft));
+        //Debug.Log((pivotPoint.rotation.y * Mathf.Rad2Deg) + "  -  total : " + (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft));
         if (isLeft)
         {
             duration = (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft) / moveSpeed;
@@ -57,7 +58,7 @@ public class CameraController : MonoBehaviour
             targetAngle = new Vector3(0, maxAngleRight);
         }
 
-        pivotPoint.DORotate(targetAngle, duration).SetEase(Ease.Linear);
+        pivotPoint.DORotate(targetAngle, duration);
 
     }
 

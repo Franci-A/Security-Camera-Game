@@ -4301,11 +4301,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6781254961004772378, guid: 5a2cccdeb86d65d4bbecc66b7401be09, type: 3}
       propertyPath: maxAngleLeft
-      value: -180
+      value: -179
       objectReference: {fileID: 0}
     - target: {fileID: 6781254961004772378, guid: 5a2cccdeb86d65d4bbecc66b7401be09, type: 3}
       propertyPath: maxAngleRight
-      value: 180
+      value: 179
       objectReference: {fileID: 0}
     - target: {fileID: 7656906550153184095, guid: 5a2cccdeb86d65d4bbecc66b7401be09, type: 3}
       propertyPath: startCamera

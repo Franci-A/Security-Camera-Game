@@ -123,7 +123,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8484909126877368739}
-  - component: {fileID: 8352731300153595203}
   - component: {fileID: 1682109595138897218}
   - component: {fileID: 2174837102705690457}
   - component: {fileID: 3036009695589833448}
@@ -153,31 +152,6 @@ Transform:
   - {fileID: 8982750784566120450}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &8352731300153595203
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2495385189467307580}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1682109595138897218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +167,11 @@ MonoBehaviour:
   speed: 5
   controllzeDeadzone: 0.188
   visual: {fileID: 5513752359730407496}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 128
+  gravityPull: 0.5
+  targetHeight: 1.1
 --- !u!114 &2174837102705690457
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,9 +1,9 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    CharacterController characterController;
     [SerializeField] private float speed = 5f;
     private Vector3 direction;
 
@@ -12,14 +12,18 @@ public class PlayerMovement : MonoBehaviour
     private Transform cameraTransform;
 
     [SerializeField] private Transform visual;
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float gravityPull = 1;
+    [SerializeField] private float targetHeight = 1f;
 
     private bool isActive = true;
     public bool IsActive { get => isActive; set => isActive = value; }
 
     private void Start()
     {
-        characterController = GetComponent<CharacterController>();
         cameraTransform = Camera.main.transform;
+        Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 5, groundMask);
+        transform.position = new Vector3(transform.position.x, hit.point.y + targetHeight, transform.position.z);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -49,6 +53,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isActive)
             return;
-        characterController.Move(direction * speed * Time.deltaTime);
+
+        Vector3 targetPos = transform.position;
+        targetPos += direction * speed * Time.deltaTime;
+        Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 5, groundMask);
+        if (hit.collider != null)
+        {
+            if (Mathf.Abs(hit.point.y - transform.position.y) > targetHeight + .05f || Mathf.Abs(hit.point.y - transform.position.y) < targetHeight - .05f)
+            {
+               targetPos += new Vector3(0, gravityPull * Time.fixedDeltaTime * Mathf.Sign(hit.point.y - transform.position.y + targetHeight));
+            }
+        }
+        transform.position = targetPos;
     }
 }

@@ -8,7 +8,7 @@ public class SecurityCameraHandler : MonoBehaviour
     public CameraController cameraController;
     private CinemachineCamera cam;
 
-    private void Start()
+    private void Awake()
     {
         cam = GetComponent<CinemachineCamera>();
     }

@@ -16,7 +16,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float zoomAmount = 10;
     [SerializeField] private float maxZoomIn = -10f;
     [SerializeField] private float maxZoomOut = 10f;
-
+    private float currentRotation = 0;
+    float targetAngle = 0;
 
     private void Start()
     {
@@ -25,41 +26,42 @@ public class CameraController : MonoBehaviour
         maxZoomIn += Camera.main.fieldOfView;
     }
 
+    private void Update()
+    {
+        if (Mathf.Abs(currentRotation - targetAngle) > 1)
+        {
+            currentRotation += moveSpeed * Mathf.Sign(targetAngle - currentRotation) * Time.deltaTime;
+            currentRotation = Mathf.Clamp(currentRotation, maxAngleLeft, maxAngleRight);
+
+            pivotPoint.rotation = Quaternion.Euler(0, currentRotation, 0);
+        }
+    }
+
     public void RotateCameraAngle(float angle)
     {
         if (angle == 0) return;
 
-        if (DOTween.IsTweening(pivotPoint))
-            DOTween.Kill(pivotPoint);
 
-        float targetAngle = (pivotPoint.rotation.y * Mathf.Rad2Deg) + angle;
+        targetAngle = currentRotation + angle;
         targetAngle = Mathf.Clamp(targetAngle, maxAngleLeft, maxAngleRight);
-        float duration = MathF.Abs(pivotPoint.rotation.y * Mathf.Rad2Deg - targetAngle) /moveSpeed;
-        pivotPoint.DORotate(new Vector3(0, targetAngle,0), duration);
-
+        float duration = MathF.Abs(currentRotation - targetAngle) /moveSpeed;
     }
 
     public void RotateCameraMax(bool isLeft)
     {
-        if (DOTween.IsTweening(pivotPoint))
-            DOTween.Kill(pivotPoint);
-        float duration = 1;
-        Vector3 targetAngle;
 
-        //Debug.Log((pivotPoint.rotation.y * Mathf.Rad2Deg) + "  -  total : " + (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft));
+        float duration = 1;
+
         if (isLeft)
         {
-            duration = (pivotPoint.rotation.y * Mathf.Rad2Deg - maxAngleLeft) / moveSpeed;
-            targetAngle = new Vector3(0, maxAngleLeft);
+            duration = (currentRotation - maxAngleLeft) / moveSpeed;
+            targetAngle = maxAngleLeft;
         }
         else
         {
-            duration = (pivotPoint.rotation.y * Mathf.Rad2Deg + maxAngleRight) / moveSpeed;
-            targetAngle = new Vector3(0, maxAngleRight);
+            duration = (currentRotation + maxAngleRight) / moveSpeed;
+            targetAngle = maxAngleRight;
         }
-
-        pivotPoint.DORotate(targetAngle, duration);
-
     }
 
     public void ZoomCamera()
